@@ -1,0 +1,28 @@
+// hall effect sensor live reading code
+const int hallSensorPin = A0; // Hall effect sensor connected to A0
+int LED = 53 ; // LED
+int digitalPin = 9; 
+int analogPin = A0; 
+int digitalInputValue ; // code includes digital input value but only analog was used for experiments
+int analogInputValue; 
+
+void setup() {
+  Serial.begin(9600); 
+  pinMode(LED, OUTPUT);
+  pinMode(digitalPin, INPUT);
+  pinMode(analogPin, INPUT); // To see the analog values whilst testing
+}
+
+void loop() {
+  // Read directly from the sensor
+  int sensorValue = analogRead(hallSensorPin);
+  
+  // Send the sensor value to the serial monitor
+  Serial.println(sensorValue);
+
+  //Here you can see the analog values of the sensor
+  analogInputValue = analogRead(analogPin);
+  Serial.println(analogInputValue); // Print analog value
+
+  delay(50);
+}
