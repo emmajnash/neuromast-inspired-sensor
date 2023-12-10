@@ -1,0 +1,43 @@
+
+import serial
+import pandas as pd
+import matplotlib.pyplot as plt
+import time
+
+# Serial port settings
+serial_port = 'COM4'  # Update this to your Arduino's serial port
+baud_rate = 9600
+timeout = 2
+
+# File settings
+output_csv = 'dataset_name.csv'
+output_graph = 'dataset_name.png'
+
+# Initialize serial connection
+ser = serial.Serial(serial_port, baud_rate, timeout = timeout)
+
+# Collect data
+data = []
+print("Collecting data from Arduino (press Ctrl+C to stop)...")
+try:
+    while True:
+        line = ser.readline().decode('utf-8').strip()
+        if line:
+            data.append(float(line))
+except KeyboardInterrupt:
+    print("Data collection stopped.")
+
+ser.close()
+
+# Create a DataFrame and save to CSV
+df = pd.DataFrame(data, columns=['Sensor Value'])
+df.to_csv(output_csv, index=False)
+print(f"Data saved to {output_csv}")
+
+# Plotting the data
+plt.plot(df['Sensor Value'])
+plt.title('Sensor Data Over Time')
+plt.xlabel('Sample Number')
+plt.ylabel('Sensor Value')
+plt.savefig(output_graph)
+plt.show()
